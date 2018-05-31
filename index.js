@@ -9,7 +9,7 @@ module.exports = (opts = {}) => {
       if (token == undefined) return false;
       const headers = ['csrf-token', 'xsrf-token', 'x-csrf-token', 'x-xsrf-token'];
       const matchesHeader = headers.some(header => req.headers[header] === token);
-      return req.body.csrf-token === token || matchesHeader;
+      return req.body['csrf-token'] === token || matchesHeader;
     }
 
     req.csrfToken = (reset) => {
