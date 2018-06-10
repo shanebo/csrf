@@ -1,16 +1,16 @@
 # CSRF
 
-Middleware for Calvin which can generate csrf tokens and protect from csrf attacks.
+Middleware for Dylan which can generate csrf tokens and protect from csrf attacks.
 
 ## Install
 
-`npm install @calvin/csrf`
+`npm install @dylan/csrf`
 
 ## Usage
 
 ``` js
-const session = require('@calvin/session');
-const csrf = require('@calvin/csrf');
+const session = require('@dylan/session');
+const csrf = require('@dylan/csrf');
 
 app.use(session({ cookie: 'foo', secret: 'boo' }));
 app.use(csrf());
