@@ -1,12 +1,13 @@
 {
-  "name": "@calvin/csrf",
+  "name": "@dylan/csrf",
   "version": "0.1.0",
-  "description": "Middleware for Calvin which can generate csrf tokens and protect from csrf attacks.",
+  "description": "Middleware for Dylan which can generate csrf tokens and protect from csrf attacks.",
   "license": "MIT",
   "keywords": [
-    "middleware"
+    "middleware",
+    "dylan"
   ],
-  "repository": "calvinjs/csrf",
+  "repository": "dylanjs/csrf",
   "author": "Shane Thacker <shane@steadymade.com>",
   "main": "./index"
 }
