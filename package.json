@@ -10,6 +10,9 @@
   "repository": "dylanjs/csrf",
   "author": "Shane Thacker <shane@steadymade.com>",
   "main": "./index",
+  "scripts": {
+    "test": "mocha --watch"
+  },
   "devDependencies": {
     "mocha": "~7.2.0",
     "chai": "~4.2.0"
