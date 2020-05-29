@@ -9,5 +9,9 @@
   ],
   "repository": "dylanjs/csrf",
   "author": "Shane Thacker <shane@steadymade.com>",
-  "main": "./index"
+  "main": "./index",
+  "devDependencies": {
+    "mocha": "~7.2.0",
+    "chai": "~4.2.0"
+  }
 }
