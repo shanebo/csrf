@@ -1,5 +1,7 @@
 const crypto = require('crypto');
 
+const generateToken = () => crypto.randomBytes(Math.ceil(32 * 3 / 4)).toString('base64').slice(0, 32);
+
 module.exports = (opts = {}) => {
   const { ignoreMethods = ['GET', 'HEAD', 'OPTIONS'] } = opts;
 
@@ -12,18 +14,16 @@ module.exports = (opts = {}) => {
       return req.body['csrf-token'] === token || matchesHeader;
     }
 
-    req.csrfToken = (reset) => {
-      const len = 32;
-      const newToken = crypto.randomBytes(Math.ceil(len * 3 / 4)).toString('base64').slice(0, len);
-      const token = reset ? newToken : (req.session.get('csrf-token') || newToken);
-      req.session.set('csrf-token', token);
-      return token;
+    if (!req.session.get('csrf-token')) {
+      req.session.set('csrf-token', generateToken());
     }
+
+    res.locals.csrfToken = req.session.get('csrf-token');
 
     if (ignoreMethods.includes(req.method) || tokenMatches()) {
       next();
     } else {
-      req.csrfToken(true);
+      req.session.delete('csrf-token');
       res.sendStatus(401);
     }
   }
