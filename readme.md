@@ -24,7 +24,7 @@ app.use(csrf());
 app.get('/contact', (req, res) => {
   res.send(`
     <form method="post" action="/contact">
-      <input type="hidden" name="csrf-token" value="${req.csrfToken()}">
+      <input type="hidden" name="csrf-token" value="${res.locals.csrfToken}">
       <input type="text" name="message" value="hello world">
       <button>Talk</button>
     </form>
