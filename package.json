@@ -1,6 +1,6 @@
 {
   "name": "@dylan/csrf",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Middleware for Dylan which can generate csrf tokens and protect from csrf attacks.",
   "license": "MIT",
   "keywords": [

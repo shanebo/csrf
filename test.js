@@ -9,37 +9,35 @@ describe('csrf middleware', () => {
     headers: {}
   };
   const res = {
+    locals: {},
     sendStatus: function(status) {
       this.status = status;
-    }
+    },
   };
 
   beforeEach(() => {
     req.method = 'POST';
     req.session = {
-        get: function(key) {
-          return this[key]
-        },
-        set: function(key, token) {
-          this[key] = token;
-        }
-      };
+      get: function(key) {
+        return this[key]
+      },
+      set: function(key, token) {
+        this[key] = token;
+      },
+      delete: function(key) {
+        delete this[key];
+      }
+    };
     req.body = {};
     res.status = 200;
   });
 
   it('sets a csrf token', () => {
+    req.method = 'GET';
     expect(req.session.get('csrf-token')).to.not.exist;
     csrf(req, res, next);
+    expect(res.locals.csrfToken).to.exist;
     expect(req.session.get('csrf-token')).to.exist;
-  });
-
-  ['GET', 'HEAD', 'OPTIONS'].forEach(requestType => {
-    it(`does not set tokens on ${requestType} requests`, () => {
-      req.method = requestType;
-      csrf(req, res, next);
-      expect(req.session.get('csrf-token')).to.not.exist;
-    });
   });
 
   describe('token set', () => {
@@ -47,7 +45,7 @@ describe('csrf middleware', () => {
 
     describe('token matches', () => {
       beforeEach(() => {
-        req.body['csrf-token'] = 'some-token'  ;
+        req.body['csrf-token'] = 'some-token';
       });
 
       it('runs normally', () => {
@@ -69,9 +67,9 @@ describe('csrf middleware', () => {
         expect(res.status).to.equal(401);
       });
 
-      it('does not change csrf token', () => {
+      it('deletes csrf token from session', () => {
         csrf(req, res, next);
-        expect(req.session.get('csrf-token')).to.not.equal('some-token');
+        expect(req.session.get('csrf-token')).to.not.exist;
       });
     });
   });
