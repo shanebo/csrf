@@ -1,29 +1,29 @@
 const crypto = require('crypto');
+const IGNORED_METHODS = ['GET', 'HEAD', 'OPTIONS'];
+const KEY = 'csrf-token';
 
-const generateToken = () => crypto.randomBytes(Math.ceil(32 * 3 / 4)).toString('base64').slice(0, 32);
 
-module.exports = (opts = {}) => {
-  const { ignoreMethods = ['GET', 'HEAD', 'OPTIONS'] } = opts;
+function makeToken() {
+  return crypto
+    .randomBytes(Math.ceil(32 * 3 / 4))
+    .toString('base64')
+    .slice(0, 32);
+}
 
+
+module.exports = () => {
   return (req, res, next) => {
-    const tokenMatches = () => {
-      const token = req.session.get('csrf-token');
-      if (token == undefined) return false;
-      const headers = ['csrf-token', 'xsrf-token', 'x-csrf-token', 'x-xsrf-token'];
-      const matchesHeader = headers.some(header => req.headers[header] === token);
-      return req.body['csrf-token'] === token || matchesHeader;
-    }
+    const token = req.session.get(KEY) || makeToken();
+    const isAllowed = IGNORED_METHODS.includes(req.method)
+      || req.body?.[KEY] === token
+      || req.headers[KEY] === token;
 
-    if (!req.session.get('csrf-token')) {
-      req.session.set('csrf-token', generateToken());
-    }
-
-    res.locals.csrfToken = req.session.get('csrf-token');
-
-    if (ignoreMethods.includes(req.method) || tokenMatches()) {
+    if (isAllowed) {
+      req.session.set(KEY, token);
+      res.locals.csrfToken = token;
       next();
     } else {
-      req.session.delete('csrf-token');
+      req.session.delete(KEY);
       res.sendStatus(401);
     }
   }
