@@ -72,5 +72,13 @@ describe('csrf middleware', () => {
         expect(req.session.get('csrf-token')).to.not.exist;
       });
     });
+
+    describe('request has no body', () => {
+      it('sends a 401', () => {
+        req.body = undefined;
+        csrf(req, res, next);
+        expect(res.status).to.equal(401);
+      });
+    });
   });
 });
