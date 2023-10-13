@@ -14,7 +14,7 @@
     "test": "mocha --watch"
   },
   "devDependencies": {
-    "mocha": "~7.2.0",
-    "chai": "~4.2.0"
+    "chai": "~4.2.0",
+    "mocha": "^10.2.0"
   }
 }
